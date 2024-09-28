@@ -1,0 +1,23 @@
+﻿<Window x:Class="Stager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Stager"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="900">
+    <Window.DataContext>
+        <local:MainWindowVm />
+    </Window.DataContext>
+    <Window.Resources>
+        <ResourceDictionary Source="pack://application:,,,/stages/StagesViewTemplate.xaml" />
+    </Window.Resources>
+    <Grid Margin="15" Background="LightGray">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="LightGray">
+            <ContentPresenter Content="{Binding StagesViewModel}" Focusable="true" Margin="10" />
+        </Border>
+    </Grid>
+</Window>

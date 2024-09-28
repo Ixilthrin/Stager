@@ -1,0 +1,155 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:stages="clr-namespace:StagesView">
+    
+    <stages:StageLabelConverter x:Key="stageLabelConverter" />
+    <stages:StageTimeConverter x:Key="stageTimeConverter" />
+    <stages:HexToColorConverter x:Key="hexToColorConverter" />
+
+    <Style x:Key="TextStyle" TargetType="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="FontFamily" Value="Century Gothic" />
+        <Setter Property="FontStyle" Value="Italic" />
+        <Setter Property="FontWeight" Value="UltraBold" />
+        <Setter Property="FontStretch" Value="UltraExpanded" />
+    </Style>
+
+    <DataTemplate DataType="{x:Type stages:StagesViewModel}" >
+        <StackPanel Background="#d3d3d9" Orientation="Vertical">
+            <Border Background="#d3d3d9" Padding="10, 0, 0, 0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="350"/>
+                        <ColumnDefinition Width="300"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row = "0" Grid.Column="0"
+                               Style="{StaticResource TextStyle}"
+                               HorizontalAlignment="Left" 
+                               FontSize ="22" 
+                               Text="{Binding Title}"
+                               Padding="10, 10, 0, 10">
+                    </TextBlock>
+                    <Border Grid.Row="1" 
+                            Grid.Column="0"
+                            HorizontalAlignment="Center"
+                            Width="150"
+                            BorderThickness="1" 
+                            BorderBrush="Black" 
+                            Background="{Binding TimeColor}" 
+                            CornerRadius="5">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Padding="5, 5, 10, 5" 
+                                       FontSize="20" 
+                                       Text="Total:" 
+                                       Style="{StaticResource TextStyle}">
+
+                            </TextBlock>
+                            <TextBlock FontSize ="20" 
+                                       Padding="5, 0, 5, 0" 
+                                       Style="{StaticResource TextStyle}"
+                                       Text="{Binding StageTotal.Time, 
+                                              Converter={StaticResource stageTimeConverter}}">
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Row="1"
+                            Grid.Column="1" 
+                            HorizontalAlignment="Center"
+                            Width="180"
+                            BorderThickness="1"
+                            BorderBrush="Black"
+                            Background="{Binding ExpectedTimeColor}"
+                            CornerRadius="5">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock HorizontalAlignment="Left"  
+                                       Style="{StaticResource TextStyle}"
+                                       Padding="5, 5, 10, 5" 
+                                       FontSize="20" 
+                                       Text="Expected:">
+                            </TextBlock>
+                            <TextBlock FontSize ="20" Padding="5, 0, 5, 0"
+                                       Style="{StaticResource TextStyle}"
+                                       Text="{Binding StageTotal.ExpectedTime,
+                                              Converter={StaticResource stageTimeConverter}}">
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="2"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <TextBlock HorizontalAlignment="Right"  
+                                       Style="{StaticResource TextStyle}"
+                                       FontSize="20"
+                                       Padding="0, 0, 10, 0"
+                                       Text="Color Scheme">
+                        </TextBlock>
+                        <ComboBox VerticalAlignment="Center"
+                                  ItemsSource="{Binding ColorSchemes}"
+                                  SelectedItem="{Binding ColorScheme, Mode=TwoWay}"
+                                  DisplayMemberPath="Name">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize ="20" Padding="5, 0, 5, 0" Text="{Binding Path=Name}" Style="{StaticResource TextStyle}"></TextBlock>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <ItemsControl Background="#d3d3d9" BorderThickness="5"  Padding="20, 0, 0, 0" ItemsSource="{Binding Stages}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <Border  VerticalAlignment="Center" 
+                                     Margin="2, 2, 2, 0" 
+                                     CornerRadius="5, 5, 0, 0" 
+                                     BorderThickness="{Binding BoxBorderThickness}" 
+                                     BorderBrush="Black" 
+                                     Background="{Binding StageColorBrush}"
+                                     Width="{Binding BoxWidth}" Height="{Binding BoxHeight}">
+                                <TextBlock Text="{Binding Label, Converter={StaticResource stageLabelConverter}}" 
+                                           Style="{StaticResource TextStyle}">
+                                </TextBlock>
+                            </Border>
+                            <Border VerticalAlignment="Center" 
+                                    Margin="2, 0, 2, 0" 
+                                    CornerRadius="0" 
+                                    BorderThickness="1, 0, 1, 1" 
+                                    BorderBrush="Black" 
+                                    Background="{Binding ExpectedTimeColor}" 
+                                    Width="{Binding BoxWidth}" Height="{Binding TimeBoxHeight}">
+                                <TextBlock Text="{Binding ExpectedTime, Converter={StaticResource stageTimeConverter}}" 
+                                           Style="{StaticResource TextStyle}">
+                                </TextBlock>
+                            </Border>
+                            <Border VerticalAlignment="Center" 
+                                    Margin="2, 0, 2, 0" 
+                                    CornerRadius="0, 0, 5, 5" 
+                                    BorderThickness="1, 0, 1, 1" 
+                                    BorderBrush="Black" 
+                                    Background="{Binding TimeColor}" 
+                                    Width="{Binding BoxWidth}" Height="{Binding TimeBoxHeight}">
+                                <TextBlock Text="{Binding Time, Converter={StaticResource stageTimeConverter}}" 
+                                           Style="{StaticResource TextStyle}">
+                                </TextBlock>
+                            </Border>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>
